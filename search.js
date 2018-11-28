@@ -49,7 +49,13 @@ var filesListGet = function(currentPath, filesList) {
                     // in files indeed is contained in files
                 var fileContent = fs.readFileSync(nextPath, 'utf8');
                 if(fileContent.indexOf(filesSearchString) >= 0) {
-                  filesList.push(nextPath);
+                  //pattern for searching whole word strings matching
+                  //to string that has been recieved from the user
+                  var regex = new RegExp('\\b' + filesSearchString + '\\b');
+                  //if whole word has been found in all data from file
+                  if(fileContent.search(regex) >= 0) {
+                    filesList.push(nextPath);
+                  }
                 }
               }
             }
