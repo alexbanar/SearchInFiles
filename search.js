@@ -48,15 +48,23 @@ var filesListGet = function(currentPath, filesList) {
               else {//check if the String for Searching
                     // in files indeed is contained in files
                 var fileContent = fs.readFileSync(nextPath, 'utf8');
-                if(fileContent.indexOf(filesSearchString) >= 0) {
+                //if(fileContent.indexOf(filesSearchString) >= 0) {
                   //pattern for searching whole word strings matching
-                  //to string that has been recieved from the user
+                  //to string that has been received from the user
                   var regex = new RegExp('\\b' + filesSearchString + '\\b');
                   //if whole word has been found in all data from file
                   if(fileContent.search(regex) >= 0) {
                     filesList.push(nextPath);
                   }
-                }
+                //}
+                  else {
+                    console.log("No file was found:\n"
+                                + "There are no files with the extention "
+                                + "'" + filesSearchExtention + "'\n"
+                                + "and that contain string word "
+                                + "'" + filesSearchString + "'\n"
+                                + "under the current directory");
+                  }
               }
             }
           }
