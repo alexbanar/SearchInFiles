@@ -5,6 +5,9 @@ fs = require('fs')
 var filesSearchExtention;
 //for getting from user
 var filesSearchString = null;
+//for checking if there is at least one file
+//with the extention that user entered
+var isFileWithUserInputExtention = false;
 
 /**
 function that recursively finds files in current directory
@@ -30,11 +33,12 @@ var filesListGet = function(currentPath, filesList) {
           //than the command name extention length, because of
           //at least one letter for the file name and one place for '.'(dot)
           if(fileName.length > (filesSearchExtention.length + 1)) {
-            //if in the fileName the plase of '.'(dot) with file extention after it
-            //is greater exactly by 1 than
+            //if in the fileName the plase of '.'(dot) with file extention
+            //after it is greater exactly by 1 than
             //beginnig place of the extention in the fileName
             if (fileName.indexOf('.' + filesSearchExtention)
                     == (fileName.length - filesSearchExtention.length - 1)) {
+              isFileWithUserInputExtention = true;
               //if there was only first command line parameter
               //(after 'search.js' application name) that contains
               //the string for checking extention of existing files
@@ -106,6 +110,7 @@ var filesPathGetByExtentionAndOrString = function() {
     process.exit(-1);
   }
 
+  var isEnteredOnlyFileExtention = true;
   //if only one command line parameter (for files extention)
   //(after 'search.js' application name)
   //if(process.argv.length == 3) {
@@ -121,11 +126,31 @@ var filesPathGetByExtentionAndOrString = function() {
     //get the second command line parameter (after 'search.js' application name)
     //that contain the string for searching files that contain this string word
     filesSearchString = process.argv[3];
+    isEnteredOnlyFileExtention = false;
   }
-
   //calls to function that recursively finds files in current directory
   //with inputed file extention and/or containment string
   var finalFilesList = filesListGet(__dirname);
+  //if user entered only file extention parameter in command line
+  //and if there was no file with the extention that user entered
+  if( (isEnteredOnlyFileExtention == true)
+        && (isFileWithUserInputExtention == false)) {
+    console.log("No file was found:\n"
+                + "There are no files with the extention "
+                + "'" + filesSearchExtention + "'\n"
+                + "under the current directory");
+  }
+  //if the user entered file extention parameter and the string
+  //parameter for searching files that contain it in command line
+  //and if there was no file with the extention that user entered
+  else if((isFileWithUserInputExtention == false)) {
+    console.log("No file was found:\n"
+                + "There are no files with the extention "
+                + "'" + filesSearchExtention + "'\n"
+                + "and that contain string word "
+                + "'" + filesSearchString + "'\n"
+                + "under the current directory");
+  }
 
   /*for(var i = 0; i < finalFilesList.length; i++) {
     console.log(finalFilesList[i]);
